@@ -31,10 +31,10 @@ namespace Modbus.Ports
             throw  new NotSupportedException("Not supported yet");
         }
 
-        private void SetupModbusClient()
+        private void SetupModbusClient(BaudRateR444A01 baudRate = BaudRateR444A01.B9600)
         {
             //modbusClient.UnitIdentifier = 1; //Not necessary since default slaveID = 1;
-            _ModbusClient.Baudrate = 9600;	// Not necessary since default baudrate = 9600
+            _ModbusClient.Baudrate = BaudRateHelper.GetBaudRate(baudRate);	// Not necessary since default baudrate = 9600
             _ModbusClient.Parity = System.IO.Ports.Parity.None;
             _ModbusClient.StopBits = System.IO.Ports.StopBits.One;
             _ModbusClient.ConnectionTimeout = 500;
@@ -51,10 +51,10 @@ namespace Modbus.Ports
             _ModbusClient.Connect();
         }
 
-        public void Reconnect()
+        public void Reconnect(BaudRateR444A01 baudRate = BaudRateR444A01.B9600)
         {
             _ModbusClient.Disconnect();
-            SetupModbusClient();
+            SetupModbusClient(baudRate);
 
             Connect();
         }
@@ -77,6 +77,7 @@ namespace Modbus.Ports
                 _ModbusClient.WriteSingleRegister(SlaveAddressRegister, slaveAddress);
 
                 _slaveAddress = slaveAddress;
+                _ModbusClient.UnitIdentifier = slaveAddress;
                 return slaveAddress;
             }
 
@@ -88,6 +89,7 @@ namespace Modbus.Ports
             if (IsConnected)
             {
                 _ModbusClient.WriteSingleRegister(BaudRateAddressRegister, (byte) baudRate);
+                Reconnect(baudRate);
             }
 
             throw new InvalidOperationException("No connection to the Modbus client was established");
