@@ -16,3 +16,12 @@ Default settings are:
 
 ![Protocol](./Documentation/Assets/ModbusRegisterInformation.jpg)
 
+
+# License
+ModbusClientR444A01 is licensed under the GNU license.
+
+
+# Future Changes
+- Replace `Easy Modbus` to remove dependency to GNU license. 
+- Make Library dotnet standard to be dotnet core compatible
+- Add Sample 
